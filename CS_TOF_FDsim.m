@@ -2,7 +2,7 @@ clear all;
 close all;
 clc;
 
-FSig = 1000; %KHz = 1GHz
+FSig = 100;%000; %KHz = 1GHz
 SampPerCyc = 20;
 SampFreq = 10;
 PhaseDelta = 2*pi/3;
@@ -28,10 +28,11 @@ figure(1)
 plot(SigRef,'b');
 hold on 
 plot(SigObj,'g');
-xlim([0 200]);
-%ylim([0 2]);
+%xlim([0 200]);
 legend('Reference','Object')
-title('Original signal')
+title('Original Signal')
+xlabel('ms')
+ylabel('Amplitude')
 
 OutObj = zeros(LoopNum,1);
 OutRef = zeros(LoopNum,1);
@@ -52,7 +53,7 @@ plot(abs(OutObj),'b');
 hold all
 plot(abs(OutRef),'g');
 legend('Compressed Object','Compressed Reference');
-title('Compressed Signal');
+title('Received Signal');
 
 Psi = inv(fft(eye(L)));
 cvx_begin
@@ -71,13 +72,14 @@ cvx_end
 
 figure(3)
 plot(real((ifft(xpR))),'b')
-xlim([0 200])
+%xlim([0 200])
 hold all
 plot(real((ifft(xp))),'g')
 legend('Reference','Object')
-title('Decompressed signal')
-xlabel('sec')
+title('Processed signal')
+xlabel('ms')
 ylabel('Amplitude')
+
 LightSpeed = 3*10^8;
 Distance = (LightSpeed/(2*FSig*10^4))*(PhaseDelta/(2*pi));
 fprintf('Measured Distance = %dm\n',Distance)
