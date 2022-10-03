@@ -81,5 +81,5 @@ xlabel('ms')
 ylabel('Amplitude')
 
 LightSpeed = 3*10^8;
-Distance = (LightSpeed/(2*FSig*10^4))*(PhaseDelta/(2*pi));
+Distance = (LightSpeed/(2*FSig*10^3))*(PhaseDelta/(2*pi));
 fprintf('Measured Distance = %dm\n',Distance)
