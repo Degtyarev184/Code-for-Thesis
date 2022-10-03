@@ -36,7 +36,7 @@ ylabel('Amplitude')
 
 OutObj = zeros(LoopNum,1);
 OutRef = zeros(LoopNum,1);
-MeasureMatrix = zeros(LoopNum,L);
+Phi = zeros(LoopNum,L);
 
 CodeObj = CodeMatrix*SigObj;
 CodeRef = CodeMatrix*SigRef;
@@ -45,7 +45,7 @@ for i=1:LoopNum
     loc = Pos(i,1);
     OutObj(i,1) = CodeObj(loc,1);
     OutRef(i,1) = CodeRef(loc,1);
-    MeasureMatrix(i,:) = CodeMatrix(loc,:);
+    Phi(i,:) = CodeMatrix(loc,:);
 end
 
 figure(2)
@@ -60,14 +60,14 @@ cvx_begin
     variable xp(L) complex;
     minimize(norm(xp,1));
     subject to
-    MeasureMatrix*Psi*xp == OutObj;
+    Phi*Psi*xp == OutObj;
 cvx_end
 
 cvx_begin
     variable xpR(L) complex;
     minimize(norm(xpR,1));
     subject to
-    MeasureMatrix*Psi*xpR == OutRef;
+    Phi*Psi*xpR == OutRef;
 cvx_end
 
 figure(3)
