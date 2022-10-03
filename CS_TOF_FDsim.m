@@ -4,16 +4,16 @@ clc;
 
 FSig = 1000; %KHz = 1GHz
 SampPerCyc = 20;
-SampFreq = 10;
+Fs = 10; %Sampling Frequency
 PhaseDelta = 2*pi/3;
-L = SampPerCyc*FSig/SampFreq; %Length of the signal
+L = SampPerCyc*FSig/Fs; %Length of the signal
 LoopNum = SampPerCyc*FSig/1000;
 
 SampleShift = L/LoopNum;
-SampleShiftPos = zeros(LoopNum,1);
+Pos = zeros(LoopNum,1);
 
 for i=1:LoopNum
-    SampleShiftPos(i,1) = (i-1)*SampleShift+1;
+    Pos(i,1) = (i-1)*SampleShift+1;
 end
 CodeMatrix = randi([0 1],L,L);
 SigObj = zeros(L,1);
@@ -28,7 +28,7 @@ figure(1)
 plot(SigRef,'b');
 hold on 
 plot(SigObj,'g');
-%xlim([0 200]);
+xlim([0 200]);
 legend('Reference','Object')
 title('Original Signal')
 xlabel('ms')
@@ -42,7 +42,7 @@ CodeObj = CodeMatrix*SigObj;
 CodeRef = CodeMatrix*SigRef;
 
 for i=1:LoopNum
-    loc = SampleShiftPos(i,1);
+    loc = Pos(i,1);
     OutObj(i,1) = CodeObj(loc,1);
     OutRef(i,1) = CodeRef(loc,1);
     MeasureMatrix(i,:) = CodeMatrix(loc,:);
@@ -72,7 +72,7 @@ cvx_end
 
 figure(3)
 plot(real((ifft(xpR))),'b')
-%xlim([0 200])
+xlim([0 200])
 hold all
 plot(real((ifft(xp))),'g')
 legend('Reference','Object')
