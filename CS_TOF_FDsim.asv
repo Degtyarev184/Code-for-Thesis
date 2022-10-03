@@ -38,13 +38,13 @@ OutObj = zeros(LoopNum,1);
 OutRef = zeros(LoopNum,1);
 MeasureMatrix = zeros(LoopNum,L);
 
-CodeObj = CodeMatrix*SigObj;
-CodeRef = CodeMatrix*SigRef;
+CodedObj = CodeMatrix*SigObj;
+CodedRef = CodeMatrix*SigRef;
 
 for i=1:LoopNum
     loc = SampleShiftPos(i,1);
-    OutObj(i,1) = CodeObj(loc,1);
-    OutRef(i,1) = CodeRef(loc,1);
+    OutObj(i,1) = CodedObj(loc,1);
+    OutRef(i,1) = CodedRef(loc,1);
     MeasureMatrix(i,:) = CodeMatrix(loc,:);
 end
 
