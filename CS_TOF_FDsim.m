@@ -93,9 +93,6 @@ title('Processed signal')
 xlabel('ms')
 ylabel('Amplitude')
 
-figure(5)
-%xpR = fftshift(xpR);
-plot(real(xpR),'c');
 PC = zeros(2,1); %Phase element array
 
 for k = 1:length(PC)
