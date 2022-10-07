@@ -2,16 +2,17 @@ clear all;
 close all;
 clc;
 
-Fbasis = 1000;
+Fbasis = 1000; %KHz
 F1 = Fbasis; %KHz = 1MHz
 F2 = 1.2*Fbasis; %KHz = 1.2MHz
 PD1 = pi/6; %1st Phase Difference Component
 PD2 = pi/5; %2nd Phase Difference Component
 SampPerCyc = 20;
 Fs = 10; %Sampling Frequency
-PhaseDelta = atan((cos(PD1) + cos(PD2))/(sin(PD1) + sin(PD2)));
+PDS = PhaseDelta(PD1,PD2);
 L = SampPerCyc*(F1+F2)/Fs; %Length of the signal
 LoopNum = SampPerCyc*(F1+F2)/1000;
+LightSpeed = 3*10^8;
 
 SampleShift = L/LoopNum;
 Pos = zeros(LoopNum,1);
@@ -29,10 +30,10 @@ for i=1:L
 end
 
 figure(1)
-plot(SigRef);
+plot(SigRef,'c');
 hold on 
-plot(SigObj);
-xlim([0 2500]);
+plot(SigObj,'k');
+xlim([0 500]);
 legend('Reference','Object')
 title('Original Signal')
 xlabel('ms')
@@ -53,18 +54,18 @@ for i=1:LoopNum
 end
 
 figure(2)
-plot(abs(CodeObj));
+plot(abs(CodeObj),'c');
 hold all
-plot(abs(CodeRef));
+plot(abs(CodeRef),'k');
 legend('Transmitted Object','Transmitted Reference');
 title('Transmitted Signal');
 
 figure(3)
-plot(abs(OutObj));
+plot(abs(OutObj),'c');
 hold all
-plot(abs(OutRef));
+plot(abs(OutRef),'k');
 legend('Compressed Object','Compressed Reference');
-title('Received Signal');
+title('Captured Signal');
 
 Psi = inv(fft(eye(L)));
 cvx_begin
@@ -80,17 +81,30 @@ cvx_begin
     subject to
     Phi*Psi*xpR == OutRef;
 cvx_end
+%xpR=fftshift(xpR);
 
 figure(4)
-plot(real(ifft(xpR)))
-xlim([0 2500])
+plot(real(ifft(xpR)),'c');
+xlim([0 500])
 hold all
-plot(real(ifft(xp)))
+plot(real(ifft(xp)),'k');
 legend('Reference','Object')
 title('Processed signal')
 xlabel('ms')
 ylabel('Amplitude')
 
-LightSpeed = 3*10^8;
-Distance = (LightSpeed/(2*abs(F2 - F1)*10^3))*(PhaseDelta/(2*pi));
-fprintf('Measured Distance = %.2fm\n',Distance)
+figure(5)
+xpR = fftshift(xpR);
+plot(real(xpR),'c');
+PhaseComponent = zeros(2,1);
+
+for k = 1:length(PhaseComponent)
+    for i = 2:length(xpR)
+        if(real(xpR(i))/10e3 > 1)
+            PhaseComponent(k) = xpR(i);
+            real(xpR(i)) = 0;
+        end
+    end
+end
+
+PDC1 = atan(imag(PhaseComponent(1))/real(PhaseComponent(1)));

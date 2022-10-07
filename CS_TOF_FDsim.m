@@ -9,9 +9,10 @@ PD1 = pi/6; %1st Phase Difference Component
 PD2 = pi/5; %2nd Phase Difference Component
 SampPerCyc = 20;
 Fs = 10; %Sampling Frequency
-PDS = PhaseDelta(PD1,PD2);
+
 L = SampPerCyc*(F1+F2)/Fs; %Length of the signal
 LoopNum = SampPerCyc*(F1+F2)/1000;
+LightSpeed = 3*10^8;
 
 SampleShift = L/LoopNum;
 Pos = zeros(LoopNum,1);
@@ -64,7 +65,7 @@ plot(abs(OutObj),'c');
 hold all
 plot(abs(OutRef),'k');
 legend('Compressed Object','Compressed Reference');
-title('Received Signal');
+title('Captured Signal');
 
 Psi = inv(fft(eye(L)));
 cvx_begin
@@ -80,6 +81,7 @@ cvx_begin
     subject to
     Phi*Psi*xpR == OutRef;
 cvx_end
+%xpR=fftshift(xpR);
 
 figure(4)
 plot(real(ifft(xpR)),'c');
@@ -90,6 +92,25 @@ legend('Reference','Object')
 title('Processed signal')
 xlabel('ms')
 ylabel('Amplitude')
+
+figure(5)
+%xpR = fftshift(xpR);
+plot(real(xpR),'c');
+PC = zeros(2,1); %Phase element array
+
+for k = 1:length(PC)
+    for i = 2:length(xpR)
+        if(real(xpR(i)) > 1)
+            PC(k) = xpR(i);
+            xpR(i) = xpR(i)*0;
+            break;
+        end
+    end
+end
+
+PDC1 = abs(atan(imag(PC(1))/real(PC(1))));
+PDC2 = abs(atan(imag(PC(2))/real(PC(2))));
+PDS = PhaseDelta(PDC1,PDC2);
 
 LightSpeed = 3*10^8;
 Distance = (LightSpeed/(2*abs(F2 - F1)*10^3))*(PDS/(2*pi));
