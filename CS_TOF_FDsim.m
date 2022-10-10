@@ -27,9 +27,9 @@ for i=1:L
 end
 
 figure(1)
-plot(SigRef,'c');
+plot(SigRef,'g');
 hold on 
-plot(SigObj,'k');
+plot(SigObj,'r');
 xlim([0 500]);
 legend('Reference','Object')
 title('Original Signal')
@@ -50,16 +50,16 @@ for i=1:LoopNum
 end
 
 figure(2)
-plot(abs(CodeObj),'c');
+plot(abs(CodeObj),'g');
 hold all
-plot(abs(CodeRef),'k');
+plot(abs(CodeRef),'r');
 legend('Transmitted Object','Transmitted Reference');
 title('Transmitted Signal');
 
 figure(3)
-plot(abs(OutObj),'c');
+plot(abs(OutObj),'g');
 hold all
-plot(abs(OutRef),'k');
+plot(abs(OutRef),'r');
 legend('Compressed Object','Compressed Reference');
 title('Captured Signal');
 
@@ -79,30 +79,48 @@ cvx_begin
 cvx_end
 
 figure(4)
-plot(real(ifft(xpR)),'c');
+plot(real(ifft(xpR)),'g');
 xlim([0 500])
 hold all
-plot(real(ifft(xp)),'k');
+plot(real(ifft(xp)),'r');
 legend('Reference','Object')
 title('Processed signal')
 xlabel('ms')
 ylabel('Amplitude')
 
-PC = zeros(2,1); %Phase element array
+PCR = zeros(2,1); %Reference phase element array
+PCO = zeros(2,1); %Object phase element array
 
-for k = 1:length(PC)
+for k = 1:length(PCO)
+    for i = 2:length(xp)
+        if(real(xp(i)) > 1)
+            PCO(k) = xp(i);
+            xp(i) = xp(i)*0;
+            break;
+        end
+    end
+end
+
+for k = 1:length(PCR)
     for i = 2:length(xpR)
         if(real(xpR(i)) > 1)
-            PC(k) = xpR(i);
+            PCR(k) = xpR(i);
             xpR(i) = xpR(i)*0;
             break;
         end
     end
 end
 
-PDC1 = atan(imag(PC(1))/real(PC(1)));
-PDC2 = atan(imag(PC(2))/real(PC(2)));
-PDS = PhaseDelta(PDC1,PDC2);
+PDCO1 = atan(imag(PCO(1))/real(PCO(1)));
+PDCO2 = atan(imag(PCO(2))/real(PCO(2)));
+
+PDCR1 = atan(imag(PCR(1))/real(PCR(1)));
+PDCR2 = atan(imag(PCR(2))/real(PCR(2)));
+
+PDS1 = abs(abs(PDCR1) - abs(PDCO1));
+PDS2 = abs(abs(PDCR2) - abs(PDCO2));
+
+PDS = PhaseDelta(PDS1,PDS2);
 
 LightSpeed = 3*10^8;
 Distance = (LightSpeed/(2*abs(F2 - F1)*10^3))*(PDS/(2*pi));

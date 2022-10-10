@@ -9,11 +9,8 @@ PD1 = pi/6; %1st Phase Difference Component
 PD2 = pi/5; %2nd Phase Difference Component
 SampPerCyc = 20;
 Fs = 10; %Sampling Frequency
-PDS = PhaseDelta(PD1,PD2);
 L = SampPerCyc*(F1+F2)/Fs; %Length of the signal
 LoopNum = SampPerCyc*(F1+F2)/1000;
-LightSpeed = 3*10^8;
-
 SampleShift = L/LoopNum;
 Pos = zeros(LoopNum,1);
 
@@ -30,9 +27,9 @@ for i=1:L
 end
 
 figure(1)
-plot(SigRef,'c');
+plot(SigRef,'g');
 hold on 
-plot(SigObj,'k');
+plot(SigObj,'r');
 xlim([0 500]);
 legend('Reference','Object')
 title('Original Signal')
@@ -42,7 +39,6 @@ ylabel('Amplitude')
 OutObj = zeros(LoopNum,1);
 OutRef = zeros(LoopNum,1);
 Phi = zeros(LoopNum,L);
-
 CodeObj = CodeMatrix*SigObj;
 CodeRef = CodeMatrix*SigRef;
 
@@ -54,16 +50,16 @@ for i=1:LoopNum
 end
 
 figure(2)
-plot(abs(CodeObj),'c');
+plot(abs(CodeObj),'g');
 hold all
-plot(abs(CodeRef),'k');
+plot(abs(CodeRef),'r');
 legend('Transmitted Object','Transmitted Reference');
 title('Transmitted Signal');
 
 figure(3)
-plot(abs(OutObj),'c');
+plot(abs(OutObj),'g');
 hold all
-plot(abs(OutRef),'k');
+plot(abs(OutRef),'r');
 legend('Compressed Object','Compressed Reference');
 title('Captured Signal');
 
@@ -81,30 +77,51 @@ cvx_begin
     subject to
     Phi*Psi*xpR == OutRef;
 cvx_end
-%xpR=fftshift(xpR);
 
 figure(4)
-plot(real(ifft(xpR)),'c');
+plot(real(ifft(xpR)),'g');
 xlim([0 500])
 hold all
-plot(real(ifft(xp)),'k');
+plot(real(ifft(xp)),'r');
 legend('Reference','Object')
 title('Processed signal')
 xlabel('ms')
 ylabel('Amplitude')
 
-figure(5)
-xpR = fftshift(xpR);
-plot(real(xpR),'c');
-PhaseComponent = zeros(2,1);
+PCR = zeros(2,1); %Reference phase element array
+PCO = zeros(2,1); %Object phase element array
 
-for k = 1:length(PhaseComponent)
-    for i = 2:length(xpR)
-        if(real(xpR(i))/10e3 > 1)
-            PhaseComponent(k) = xpR(i);
-            real(xpR(i)) = 0;
+for k = 1:length(PCO)
+    for i = 2:length(xp)
+        if(real(xp(i)) > 1)
+            PCO(k) = xp(i);
+            xp(i) = xp(i)*0;
+            break;
         end
     end
 end
 
-PDC1 = atan(imag(PhaseComponent(1))/real(PhaseComponent(1)));
+for k = 1:length(PCR)
+    for i = 2:length(xpR)
+        if(real(xpR(i)) > 1)
+            PCR(k) = xpR(i);
+            xpR(i) = xpR(i)*0;
+            break;
+        end
+    end
+end
+
+PDCO1 = atan(imag(PCO(1))/real(PCO(1)));
+PDCO2 = atan(imag(PCO(2))/real(PCO(2)));
+
+PDCR1 = atan(imag(PCR(1))/real(PCR(1)));
+PDCR2 = atan(imag(PCR(2))/real(PCR(2)));
+
+PDS1 = abs(PDCR1 - PDCO1);
+PDS2 = abs(PDCR2 - PDCO2);
+
+PDS = PhaseDelta(PDS1,);
+
+LightSpeed = 3*10^8;
+Distance = (LightSpeed/(2*abs(F2 - F1)*10^3))*(PDS/(2*pi));
+fprintf('Measured Distance = %.2fm\n',Distance)
