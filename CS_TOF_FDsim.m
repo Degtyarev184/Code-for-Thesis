@@ -9,11 +9,8 @@ PD1 = pi/6; %1st Phase Difference Component
 PD2 = pi/5; %2nd Phase Difference Component
 SampPerCyc = 20;
 Fs = 10; %Sampling Frequency
-
 L = SampPerCyc*(F1+F2)/Fs; %Length of the signal
 LoopNum = SampPerCyc*(F1+F2)/1000;
-LightSpeed = 3*10^8;
-
 SampleShift = L/LoopNum;
 Pos = zeros(LoopNum,1);
 
@@ -42,7 +39,6 @@ ylabel('Amplitude')
 OutObj = zeros(LoopNum,1);
 OutRef = zeros(LoopNum,1);
 Phi = zeros(LoopNum,L);
-
 CodeObj = CodeMatrix*SigObj;
 CodeRef = CodeMatrix*SigRef;
 
@@ -81,7 +77,6 @@ cvx_begin
     subject to
     Phi*Psi*xpR == OutRef;
 cvx_end
-%xpR=fftshift(xpR);
 
 figure(4)
 plot(real(ifft(xpR)),'c');
@@ -105,8 +100,8 @@ for k = 1:length(PC)
     end
 end
 
-PDC1 = abs(atan(imag(PC(1))/real(PC(1))));
-PDC2 = abs(atan(imag(PC(2))/real(PC(2))));
+PDC1 = atan(imag(PC(1))/real(PC(1)));
+PDC2 = atan(imag(PC(2))/real(PC(2)));
 PDS = PhaseDelta(PDC1,PDC2);
 
 LightSpeed = 3*10^8;
