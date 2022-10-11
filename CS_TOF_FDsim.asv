@@ -97,7 +97,7 @@ ylabel('Amplitude')
 PCR = zeros(2,1); %Reference phase element array
 PCO = zeros(2,1); %Object phase element array
 
-%Selecting 
+%Select the correct peak of object signal in frequency domain for phase recovering 
 for k = 1:length(PCO)
     for i = 2:length(xp)
         if(real(xp(i)) > 1)
@@ -108,7 +108,7 @@ for k = 1:length(PCO)
     end
 end
 
-%Select the correct 
+%Select the correct peak of object signal in frequency domain for phase recovering
 for k = 1:length(PCR)
     for i = 2:length(xpR)
         if(real(xpR(i)) > 1)
