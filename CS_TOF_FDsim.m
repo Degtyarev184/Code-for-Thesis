@@ -4,14 +4,14 @@ clc;
 
 %% Create signal
 Fbasis = 1000; %KHz
-F1 = Fbasis; %KHz = 1MHz
-F2 = 1.2*Fbasis; %KHz = 1.2MHz
+F1 = Fbasis; %KHz = 1MHz %First frequency of the signal
+F2 = 1.2*Fbasis; %KHz = 1.2MHz %Second frequency of the signal
 PD1 = pi/6; %1st Component Phase Difference
 PD2 = pi/5; %2nd Component Phase Difference
-SampPerCyc = 20; %Amount of captured sample
+SampPerCyc = 20;
 Fs = 10; %Sampling Frequency
 L = SampPerCyc*(F1+F2)/Fs; %Length of the signal
-LoopNum = SampPerCyc*(F1+F2)/1000; %Number of repeat signal
+LoopNum = SampPerCyc*(F1+F2)/1000; %Signal repeat times number
 SampleShift = L/LoopNum; %Delay between signal
 Pos = zeros(LoopNum,1); %Captured position of signal
 
@@ -42,8 +42,8 @@ ylabel('Amplitude')
 GrabObj = zeros(LoopNum,1); %Captured object signal
 GrabRef = zeros(LoopNum,1); %Captured reference signal
 Phi = zeros(LoopNum,L); %Matrix for decrypting captured signal
-CodeObj = CodeMatrix*SigObj; %Encrypted object signal be transmitted
-CodeRef = CodeMatrix*SigRef; %Encrypted reference signal be transmitted
+CodeObj = CodeMatrix*SigObj; %Encrypting reflected object signal 
+CodeRef = CodeMatrix*SigRef; %Encrypting transmitted reference signal 
 
 for i=1:LoopNum
     loc = Pos(i,1);
@@ -56,8 +56,8 @@ figure(2)
 plot(abs(CodeObj),'g');
 hold all
 plot(abs(CodeRef),'r');
-legend('Transmitted Object','Transmitted Reference');
-title('Transmitted Signal');
+legend('Reflected Object','Transmitted Reference');
+title('Encrypted Signal');
 
 figure(3)
 plot(abs(GrabObj),'g');
