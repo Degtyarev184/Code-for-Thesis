@@ -33,7 +33,7 @@ figure()
 plot(SigRef,'g');
 hold on 
 plot(SigObj,'r');
-%xlim([0 1000]); %Limit for clear view of signal phase difference
+xlim([0 1000]); %Limit for clear view of signal phase difference
 legend('Reference','Object')
 title('Original Signal')
 xlabel('ms')
@@ -108,7 +108,7 @@ title('Recovery Verify for Object Signal');
 
 figure()
 plot(real(ifft(xpR)),'g');
-%xlim([0 1000]) %Limit for clear view of signal phase difference
+xlim([0 1000]) %Limit for clear view of signal phase difference
 hold all
 plot(real(ifft(xp)),'r');
 legend('Reference','Object')
