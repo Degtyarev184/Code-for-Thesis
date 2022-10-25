@@ -1,3 +1,3 @@
-function y = PhaseDelta(m1,m2)
-    y = atan((sin(m1) + sin(m2))/(cos(m1) + cos(m2)));
+function y = PhaseDelta(m)
+    y = atan(abs(imag(m))/abs(real(m)));
 end
