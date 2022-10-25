@@ -6,8 +6,8 @@ clc;
 Fbase = 1000; %KHz
 F1 = Fbase; %KHz = 1MHz %First frequency of the signal
 F2 = 1.2*Fbase; %KHz = 1.2MHz %Second frequency of the signal
-PD1 = (64/6)*pi; %1st Component Phase Difference
-PD2 = (64/5)*pi; %2nd Component Phase Difference
+PD1 = (4/6)*pi; %1st Component Phase Difference
+PD2 = (4/5)*pi; %2nd Component Phase Difference
 SpL = 2; %Sparse level
 SampPerCyc = 60;
 Fs = 10; %Sampling Frequency at 10 KHz
@@ -33,7 +33,7 @@ figure()
 plot(SigRef,'g');
 hold on 
 plot(SigObj,'r');
-xlim([0 1000]); %Limit for clear view of signal phase difference
+%xlim([0 1000]); %Limit for clear view of signal phase difference
 legend('Reference','Object')
 title('Original Signal')
 xlabel('ms')
@@ -108,7 +108,7 @@ title('Recovery Verify for Object Signal');
 
 figure()
 plot(real(ifft(xpR)),'g');
-xlim([0 1000]) %Limit for clear view of signal phase difference
+%xlim([0 1000]) %Limit for clear view of signal phase difference
 hold all
 plot(real(ifft(xp)),'r');
 legend('Reference','Object')
@@ -185,6 +185,3 @@ PDS = ((2*pi*LocDif)/Cycle);
 LightSpeed = 3e8;
 Distance = (LightSpeed/(2*abs(F1-F2)*10^3))*(PDS/(2*pi));
 fprintf('Measured Distance = %.2fm\n',Distance)
-fprintf('Measured Distance = %.20fm\n',PD1)
-fprintf('Measured Distance = %.20fm\n',PD2)
-fprintf('Measured Distance = %.20fm\n',PDS)
