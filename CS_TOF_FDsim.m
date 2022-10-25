@@ -6,10 +6,10 @@ clc;
 Fbase = 1000; %KHz
 F1 = Fbase; %KHz = 1MHz %First frequency of the signal
 F2 = 1.2*Fbase; %KHz = 1.2MHz %Second frequency of the signal
-PD1 = (4/6)*pi; %1st Component Phase Difference
-PD2 = (4/5)*pi; %2nd Component Phase Difference
+PD1 = (3/6)*pi; %1st Component Phase Difference
+PD2 = (3/5)*pi; %2nd Component Phase Difference
 SpL = 2; %Sparse level
-SampPerCyc = 30;
+SampPerCyc = 60;
 Fs = 10; %Sampling Frequency
 L = SampPerCyc*(F1+F2)/Fs; %Length of the signal
 LoopNum = SampPerCyc*(F1+F2)/1000; %Signal repeat times number
@@ -33,7 +33,7 @@ figure()
 plot(SigRef,'g');
 hold on 
 plot(SigObj,'r');
-xlim([0 500]); %Limit for clear view of signal phase difference
+xlim([0 1000]); %Limit for clear view of signal phase difference
 legend('Reference','Object')
 title('Original Signal')
 xlabel('ms')
@@ -91,23 +91,23 @@ figure()
 plot(real(xpR))
 figure()
 plot(real(ifft(xpR)),'r.');
-xlim([0 500])
+xlim([0 1000])
 hold all
 plot(SigRef,'g');
 legend('Recovered Reference','Original Reference')
-title('Comparison');
+title('Recovery');
 
 figure()
 plot(real(ifft(xp)),'r.');
-xlim([0 500])
+xlim([0 1000])
 hold all
 plot(SigObj,'g');
 legend('Recovered Object','Original Object')
-title('Comparison'); 
+title('Recovery'); 
 
 figure()
 plot(real(ifft(xpR)),'g');
-xlim([0 500]) %Limit for clear view of signal phase difference
+xlim([0 1000]) %Limit for clear view of signal phase difference
 hold all
 plot(real(ifft(xp)),'r');
 legend('Reference','Object')
@@ -116,70 +116,70 @@ xlabel('ms')
 ylabel('Amplitude')
 
 %% Calculate phase difference (in frequency domain)
-PCR = zeros(2,1); %Reference phase element array
-PCO = zeros(2,1); %Object phase element array
-%Select the correct peak of object signal in frequency domain for phase recovering 
-for k = 1:length(PCO)
-    for i = 2:length(xp)
-        if(real(xp(i)) > 1 || real(xp(i)) < -1)
-            PCO(k) = xp(i);
-            xp(i) = xp(i)*0;
-            break;
-        end
-    end
-end
-
-%Select the correct peak of reference signal in frequency domain for phase recovering
-for k = 1:length(PCR)
-    for i = 2:length(xpR)
-        if(real(xpR(i)) > 1 || real(xpR(i)) < -1)
-            PCR(k) = xpR(i);
-            xpR(i) = xpR(i)*0;
-            break;
-        end
-    end
-end
-
-PDCO1 = abs(PhaseDelta(PCO(1))); %Recover phase of first component of object signal
-PDCO2 = abs(PhaseDelta(PCO(2))); %Recover phase of first component of object signal
-
-PDCR1 = abs(PhaseDelta(PCR(1))); %Recover phase of first component of object signal
-PDCR2 = abs(PhaseDelta(PCR(2))); %Recover phase of first component of object signal
-
-PD1S = PDCR1 - PDCR2; %Phase difference of first component of 2 signal
-PD2S = PDCO1 - PDCO2; %Phase difference of second component of 2 signal
-
-PDS = abs(PD2S - PD1S); %Total phase difference
+% PCR = zeros(2,1); %Reference phase element array
+% PCO = zeros(2,1); %Object phase element array
+% %Select the correct peak of object signal in frequency domain for phase recovering 
+% for k = 1:length(PCO)
+%     for i = 2:length(xp)
+%         if(real(xp(i)) > 1 || real(xp(i)) < -1)
+%             PCO(k) = xp(i);
+%             xp(i) = xp(i)*0;
+%             break;
+%         end
+%     end
+% end
+% 
+% %Select the correct peak of reference signal in frequency domain for phase recovering
+% for k = 1:length(PCR)
+%     for i = 2:length(xpR)
+%         if(real(xpR(i)) > 1 || real(xpR(i)) < -1)
+%             PCR(k) = xpR(i);
+%             xpR(i) = xpR(i)*0;
+%             break;
+%         end
+%     end
+% end
+% 
+% PDCO1 = abs(PhaseDelta(PCO(1))); %Recover phase of first component of object signal
+% PDCO2 = abs(PhaseDelta(PCO(2))); %Recover phase of first component of object signal
+% 
+% PDCR1 = abs(PhaseDelta(PCR(1))); %Recover phase of first component of object signal
+% PDCR2 = abs(PhaseDelta(PCR(2))); %Recover phase of first component of object signal
+% 
+% PD1S = PDCR1 - PDCR2; %Phase difference of first component of 2 signal
+% PD2S = PDCO1 - PDCO2; %Phase difference of second component of 2 signal
+% 
+% PDS = abs(PD2S - PD1S); %Total phase difference
 %% Calculate phase difference (in time domain)
-% MaxObjLoc = 0;
-% MaxRefLoc = 0;
-% Cycle = SampPerCyc*Fs/SpL;
-% RcvObjCyc = zeros(1,Cycle);
-% RcvRefCyc = zeros(1,Cycle);
-% RcvObj = real(ifft(xp));
-% RcvRef = real(ifft(xpR));
-% 
-% for i = 1:Cycle
-%     RcvObjCyc(i) = RcvObj(i);
-%     RcvRefCyc(i) = RcvRef(i);
-% end
-% 
-% for i = 1:length(RcvObjCyc)
-%     if(RcvObjCyc(i) == max(RcvObjCyc))
-%         MaxObjLoc = i;
-%         break;
-%     end
-% end
-% 
-% for i = 1:length(RcvRefCyc)
-%     if(RcvRefCyc(i) == max(RcvRefCyc))
-%         MaxRefLoc = i;
-%         break;
-%     end
-% end
-% 
-% DifLoc = abs(MaxRefLoc - MaxObjLoc);
-% PDS = ((2*pi*(DifLoc))/Cycle);
+MaxObjLoc = 0;
+MaxRefLoc = 0;
+Cycle = SampPerCyc*Fs/SpL;
+RcvObjCyc = zeros(1,Cycle);
+RcvRefCyc = zeros(1,Cycle);
+RcvObj = real(ifft(xp));
+RcvRef = real(ifft(xpR));
+
+for i = 1:Cycle
+    RcvObjCyc(i) = RcvObj(i);
+    RcvRefCyc(i) = RcvRef(i);
+end
+
+for i = 1:length(RcvObjCyc)
+    if(RcvObjCyc(i) == max(RcvObjCyc))
+        MaxObjLoc = i;
+        break;
+    end
+end
+
+for i = 1:length(RcvRefCyc)
+    if(RcvRefCyc(i) == max(RcvRefCyc))
+        MaxRefLoc = i;
+        break;
+    end
+end
+
+DifLoc = abs(MaxRefLoc - MaxObjLoc);
+PDS = ((2*pi*(DifLoc))/Cycle);
 %% Distance calculation
 LightSpeed = 3e8;
 Distance = (LightSpeed/(2*abs(F1-F2)*10^3))*(PDS/(2*pi));
