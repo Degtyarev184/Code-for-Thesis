@@ -185,6 +185,3 @@ PDS = ((2*pi*LocDif)/Cycle);
 LightSpeed = 3e8;
 Distance = (LightSpeed/(2*abs(F1-F2)*10^3))*(PDS/(2*pi));
 fprintf('Measured Distance = %.2fm\n',Distance)
-fprintf('Measured Distance = %.20fm\n',PD1)
-fprintf('Measured Distance = %.20fm\n',PD2)
-fprintf('Measured Distance = %.20fm\n',PDS)
