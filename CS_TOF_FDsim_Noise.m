@@ -45,7 +45,7 @@ GrabRef = zeros(LoopNum,1); %Captured reference signal
 Phi = zeros(LoopNum,L); %Matrix for decrypting captured signal
 CodeObj = CodeMatrix*SigObj; %Encrypting reflected object signal 
 CodeRef = CodeMatrix*SigRef; %Encrypting transmitted reference signal 
-NoiseCodeObj = awgn(CodeObj,10,'measured');
+NoiseCodeObj = awgn(CodeObj,30,'measured');
 for i=1:LoopNum
     loc = Pos(i,1);
     GrabObj(i,1) = NoiseCodeObj(loc,1);
@@ -185,3 +185,11 @@ PDS = ((2*pi*LocDif)/Cycle);
 LightSpeed = 3e8;
 Distance = (LightSpeed/(2*abs(F1-F2)*10^3))*(PDS/(2*pi));
 fprintf('Measured Distance = %.2fm\n',Distance)
+%% Evaluation
+RefDif = SigRef - ifft(xpR);
+RefErrorRate = norm(RefDif) / norm(SigRef);
+fprintf('Reference Recovery error: %.0f%%\n', RefErrorRate*100);
+
+ObjDif = SigObj - ifft(xp);
+ObjErrorRate = norm(ObjDif) / norm(SigObj);
+fprintf('Object Recovery error: %.0f%%\n', ObjErrorRate*100);

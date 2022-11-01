@@ -185,3 +185,11 @@ PDS = ((2*pi*LocDif)/Cycle);
 LightSpeed = 3e8;
 Distance = (LightSpeed/(2*abs(F1-F2)*10^3))*(PDS/(2*pi));
 fprintf('Measured Distance = %.2fm\n',Distance)
+%% Evaluation
+RefDif = SigRef - ifft(xpR);
+RefErrorRate = norm(RefDif) / norm(SigRef);
+fprintf('Reference Recovery error: %.0f%%\n', RefErrorRate*100);
+
+ObjDif = SigObj - ifft(xp);
+ObjErrorRate = norm(ObjDif) / norm(SigObj);
+fprintf('Object Recovery error: %.0f%%\n', ObjErrorRate*100);
