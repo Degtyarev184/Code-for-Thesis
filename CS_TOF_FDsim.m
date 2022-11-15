@@ -3,11 +3,14 @@ close all;
 clc;
 
 %% Create signal
+LightSpeed = 3e8;
+OrgDis = 500; %m
 Fbase = 1000; %KHz
 F1 = Fbase; %KHz = 1MHz %First frequency of the signal
 F2 = 1.2*Fbase; %KHz = 1.2MHz %Second frequency of the signal
-PD1 = (4/6)*pi; %1st Component Phase Difference
-PD2 = (4/5)*pi; %2nd Component Phase Difference
+PD1 = (2*F1*2*pi*10^3*OrgDis)/LightSpeed; %1st Component Phase Difference
+PD2 = (2*F2*2*pi*10^3*OrgDis)/LightSpeed; %2nd Component Phase Difference
+OrgPDS = abs(PD1 - PD2);
 SpL = 2; %Sparse level
 SampPerCyc = 60;
 Fs = 10; %Sampling Frequency at 10 KHz
@@ -182,7 +185,6 @@ end
 LocDif = abs(MaxRefLoc - MaxObjLoc);
 PDS = ((2*pi*LocDif)/Cycle);
 %% Distance calculation
-LightSpeed = 3e8;
 Distance = (LightSpeed/(2*abs(F1-F2)*10^3))*(PDS/(2*pi));
 fprintf('Measured Distance = %.2fm\n',Distance)
 %% Evaluation
