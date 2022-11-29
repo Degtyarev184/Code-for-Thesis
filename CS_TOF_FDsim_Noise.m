@@ -61,6 +61,7 @@ hold all
 plot(CodeRef,'r');
 legend('Reflected Object','Transmitted Reference');
 title('Encrypted Signal');
+ylabel('Intensity')
 
 figure()
 plot(GrabObj,'g');
@@ -68,6 +69,8 @@ hold all
 plot(GrabRef,'r');
 legend('Compressed Object','Compressed Reference');
 title('Captured Signal');
+ylabel('Intensity')
+xlabel('Sample')
 
 Psi = inv(fft(eye(L))); %Coding matrix
 %Recover object signal
@@ -87,10 +90,12 @@ cvx_begin
 cvx_end
 
 %% Confirm correct recovery
-% figure()
-% plot(real(xp))
-% figure()
-% plot(real(xpR))
+figure()
+plot(real(xp))
+title('Fourier Transform Of Object Signal');
+figure()
+plot(real(xpR))
+title('Fourier Transform Of Reference Signal');
 
 figure()
 plot(real(ifft(xpR)),'g.');
@@ -186,11 +191,11 @@ PDS = ((2*pi*LocDif)/Cycle);
 %% Distance calculation
 Distance = (LightSpeed/(2*abs(F1-F2)*10^3))*(PDS/(2*pi));
 fprintf('Measured Distance = %.2fm\n',Distance)
+DistanceError = ((OrgDis - Distance)/OrgDis)*100;
+fprintf('Error Rate of Measured Distance = %.3f%%\n',DistanceError);
 %% Evaluation
-RefDif = SigRef - ifft(xpR);
-RefErrorRate = norm(RefDif) / norm(SigRef);
-fprintf('Reference Recovery error: %.3f%%\n', RefErrorRate*100);
+RefErrorRate = immse(SigRef,ifft(xpR));
+fprintf('Reference Recovery error: %.3f\n', RefErrorRate);
 
-ObjDif = SigObj - ifft(xp);
-ObjErrorRate = norm(ObjDif) / norm(SigObj);
-fprintf('Object Recovery error: %.3f%%\n', ObjErrorRate*100);
+ObjErrorRate = immse(SigObj,ifft(xp));
+fprintf('Object Recovery error: %.3f\n', ObjErrorRate);

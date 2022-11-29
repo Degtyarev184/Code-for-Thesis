@@ -1,0 +1,35 @@
+clc
+close all
+clear all
+SNR = (13:3:100);
+ErrObj = zeros(30,30);
+ErrDis = zeros(30,30);
+Dis = zeros(30,30);
+AvgObj = zeros(1,30);
+AvgDis = zeros(1,30);
+for i=1:30
+    SumObj = 0;
+    SumDis = 0;
+    for j=1:30
+        [ErrObj(i,j),Dis(i,j),ErrDis(i,j)] = CS_TOF_FDsim_Noise(SNR(i));
+        SumObj = SumObj + ErrObj(i,j);
+        SumDis = SumDis + ErrDis(i,j);
+        pause(20);
+    end
+    SumObj = SumObj/30;
+    AvgObj(i) = SumObj;
+    SumDis = SumDis/30;
+    AvgDis(i) = SumDis;
+end
+
+Hình 1: Nguyên lý hoạt động của ToF	1
+Hình 2: Cách hệ thống ToF tính toán độ lệch pha	2
+Hình 3: Minh họa kỹ thuật Stereo vision	4
+Hình 4: Minh họa kỹ thuật Structured-Light	5
+Hình 5: Ứng dụng thực tế của ToF	6
+Hình 6: So sánh CS với phương pháp nén truyền thống	8
+Hình 7: Data aquisition với tín hiệu thưa	9
+Hình 8: Data acquisition với tín hiệu không thưa	10
+Hình 9: Ví dụ về tín hiệu thưa thớt	12
+Hình 10: Đề xuất hệ thống đo khoảng cách	15
+Hình 11: Đề xuất hệ thống tạo ảnh 3D	16
