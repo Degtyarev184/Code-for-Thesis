@@ -4,7 +4,7 @@ clc;
 
 %% Create signal
 LightSpeed = 3e8;
-OrgDis = 500; %m
+OrgDis = 725; %m
 Fbase = 1000; %KHz
 F1 = Fbase; %KHz = 1MHz %First frequency of the signal
 F2 = 1.2*Fbase; %KHz = 1.2MHz %Second frequency of the signal
@@ -47,7 +47,7 @@ GrabRef = zeros(LoopNum,1); %Captured reference signal
 Phi = zeros(LoopNum,L); %Matrix for decrypting captured signal
 CodeObj = CodeMatrix*SigObj; %Encrypting reflected object signal 
 CodeRef = CodeMatrix*SigRef; %Encrypting transmitted reference signal 
-NoiseCodeObj = awgn(CodeObj,50,'measured');
+NoiseCodeObj = awgn(CodeObj,40,'measured');
 for i=1:LoopNum
     loc = Pos(i,1);
     GrabObj(i,1) = NoiseCodeObj(loc,1);
