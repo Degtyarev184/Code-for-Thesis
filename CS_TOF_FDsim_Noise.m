@@ -1,10 +1,9 @@
-clear all;
+function [Distance] = CS_TOF_FDsim_Noise(OrgDis)
 close all;
 clc;
 
 %% Create signal
 LightSpeed = 3e8;
-OrgDis = 725; %m
 Fbase = 1000; %KHz
 F1 = Fbase; %KHz = 1MHz %First frequency of the signal
 F2 = 1.2*Fbase; %KHz = 1.2MHz %Second frequency of the signal

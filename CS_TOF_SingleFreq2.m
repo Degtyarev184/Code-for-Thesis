@@ -28,15 +28,15 @@ for i=1:L
     SigRef(i) = cos(2*pi*F2/(Fbase*SampPerCyc)*i+PD2)+1;
 end
 
-figure()
-plot(SigRef,'g');
-hold on 
-plot(SigObj,'r');
-xlim([0 1000]); %Limit for clear view of signal phase difference
-legend('Reference','Object')
-title('Original Signal')
-xlabel('ms')
-ylabel('Amplitude')
+% figure()
+% plot(SigRef,'g');
+% hold on 
+% plot(SigObj,'r');
+% xlim([0 1000]); %Limit for clear view of signal phase difference
+% legend('Reference','Object')
+% title('Original Signal')
+% xlabel('ms')
+% ylabel('Amplitude')
 
 %% Capture and recover compressed signal
 GrabObj = zeros(LoopNum,1); %Captured object signal
@@ -52,23 +52,23 @@ for i=1:LoopNum
     Phi(i,:) = CodeMatrix(loc,:);
 end
 
-figure()
-plot(CodeObj,'g');
-hold all
-plot(CodeRef,'r');
-legend('Reflected Object','Transmitted Reference');
-title('Encrypted Signal');
-xlabel('ms')
-ylabel('Intensity')
-
-figure()
-plot(GrabObj,'g');
-hold all
-plot(GrabRef,'r');
-legend('Compressed Object','Compressed Reference');
-title('Captured Signal');
-ylabel('Intensity')
-xlabel('Sample')
+% figure()
+% plot(CodeObj,'g');
+% hold all
+% plot(CodeRef,'r');
+% legend('Reflected Object','Transmitted Reference');
+% title('Encrypted Signal');
+% xlabel('ms')
+% ylabel('Intensity')
+% 
+% figure()
+% plot(GrabObj,'g');
+% hold all
+% plot(GrabRef,'r');
+% legend('Compressed Object','Compressed Reference');
+% title('Captured Signal');
+% ylabel('Intensity')
+% xlabel('Sample')
 
 Psi = inv(fft(eye(L))); %Coding matrix
 %Recover object signal
@@ -88,15 +88,15 @@ cvx_begin
 cvx_end
 
 %% Confirm correct recovery
-figure()
-plot(real(ifft(xpR)),'g');
-xlim([0 1000]) %Limit for clear view of signal phase difference
-hold all
-plot(real(ifft(xp)),'r');
-legend('Reference','Object')
-title('Processed signal')
-xlabel('ms')
-ylabel('Amplitude')
+% figure()
+% plot(real(ifft(xpR)),'g');
+% xlim([0 1000]) %Limit for clear view of signal phase difference
+% hold all
+% plot(real(ifft(xp)),'r');
+% legend('Reference','Object')
+% title('Processed signal')
+% xlabel('ms')
+% ylabel('Amplitude')
 %% Calculate phase difference (in time domain)
 MaxObjLoc = 0;
 MaxRefLoc = 0;

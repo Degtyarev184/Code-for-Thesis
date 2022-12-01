@@ -10,6 +10,10 @@ for i = 1:30
     DisF2(i) = CS_TOF_SingleFreq2(OrgDis(i));
     Dis2F(i) = CS_TOF_FDsim(OrgDis(i));
 end
+Dis2FR = Dis2F';
+DisF1R = DisF1';
+DisF2R = DisF2';
+OrgDisR = OrgDis';
 figure()
 plot(DisF1,'-sr');
 hold on
