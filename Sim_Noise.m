@@ -1,41 +1,43 @@
 clc
 close all
 clear all
-DisF1 = zeros(30,30);
-DisF2 = zeros(30,30);
-Dis2F = zeros(30,30);
-AvgDisF1 = zeros(1,30);
-AvgDisF2 = zeros(1,30);
-AvgDis2F = zeros(1,30);
-OrgDis = [45:25:775];
-for i = 1:30
+DisF1N = zeros(11,11);
+DisF2N = zeros(11,11);
+Dis2FN = zeros(11,11);
+AvgDisF1N = zeros(1,11);
+AvgDisF2N = zeros(1,11);
+AvgDis2FN = zeros(1,11);
+OrgDis = [120 145 245 295 370 445 495 595 620 745 775];
+for i = 1:11
     SumDisF1 = 0;
     SumDisF2 = 0;
     SumDis2F = 0;
-    for j = 1:30
-        DisF1(i,j) = CS_TOF_SingleFreq1(OrgDis(i));
-        SumDisF1 = SumDisF1 + DisF1(i,j);
-        DisF2(i,j) = CS_TOF_SingleFreq2(OrgDis(i));
-        SumDisF2 = SumDisF2 + DisF2(i,j);
-        Dis2F(i,j) = CS_TOF_FDsim(OrgDis(i));
-        SumDis2F = SumDis2F + Dis2F(i,j);
+    for j = 1:11
+        DisF1N(i,j) = CS_TOF_SingleFreq1_Noise(OrgDis(i));
+        SumDisF1 = SumDisF1 + DisF1N(i,j);
+        DisF2N(i,j) = CS_TOF_SingleFreq2_Noise(OrgDis(i));
+        SumDisF2 = SumDisF2 + DisF2N(i,j);
+        Dis2FN(i,j) = CS_TOF_FDsim_Noise(OrgDis(i));
+        SumDis2F = SumDis2F + Dis2FN(i,j);
     end
-    SumDisF1 = SumDisF1/30;
-    AvgDisF1(i) = SumDisF1;
-    SumDisF1 = SumDisF1/30;
-    AvgDisF1(i) = SumDisF1;
-    SumDisF1 = SumDisF1/30;
-    AvgDisF1(i) = SumDisF1;
+    SumDisF1 = SumDisF1/11;
+    AvgDisF1N(i) = SumDisF1;
+    SumDisF2 = SumDisF2/11;
+    AvgDisF2N(i) = SumDisF2;
+    SumDis2F = SumDis2F/11;
+    AvgDis2FN(i) = SumDis2F;
 end
-AvgDis2FR = AvgDis2F';
-AvgDisF1R = AvgDisF1';
-AvgDisF2R = AvgDisF2';
+AvgDis2FNR = AvgDis2FN';
+AvgDisF1NR = AvgDisF1N';
+AvgDisF2NR = AvgDisF2N';
 OrgDisR = OrgDis';
 figure()
-plot(AvgDisF1,'-sr');
+plot(AvgDisF1N,OrgDis'-sr');
 hold on
-plot(AvgDisF2,'-sg');
+plot(AvgDisF2N,OrgDis'-sg');
 hold on
-plot(AvgDis2F,'-sb');
+plot(AvgDis2FN,OrgDis'-sb');
 legend("1MHz","1.2MHz","Two Frequency");
-title("Measured Distance");
+title("Measured Distance with SNR = 50dB");
+xlabel("Average Measured (m)");
+ylabel("Preset Distance (m)"); 

@@ -1,4 +1,5 @@
 close all
+clc
 figure()
 plot(OrgDis,DisF1,'-xr');
 hold on
