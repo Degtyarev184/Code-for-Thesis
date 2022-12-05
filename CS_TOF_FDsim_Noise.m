@@ -1,16 +1,16 @@
-function [Distance] = CS_TOF_FDsim_Noise(OrgDis)
+function [ObjErrorRate,Distance,DistanceError] = CS_TOF_FDsim_Noise(SampPerCyc)
 close all;
 clc;
 
 %% Create signal
 LightSpeed = 3e8;
 Fbase = 1000; %KHz
+OrgDis = 500;
 F1 = Fbase; %KHz = 1MHz %First frequency of the signal
 F2 = 1.2*Fbase; %KHz = 1.2MHz %Second frequency of the signal
 PD1 = (2*F1*2*pi*1e3*OrgDis)/LightSpeed; %1st Component Phase Difference
 PD2 = (2*F2*2*pi*1e3*OrgDis)/LightSpeed; %2nd Component Phase Difference
 SpL = 2; %Sparse level
-SampPerCyc = 60;
 Fs = 10; %Sampling Frequency at 10 KHz
 L = (SampPerCyc*(F1+F2)/Fs)/2; %Length of the signal reduced 2 times for faster calculation
 LoopNum = SampPerCyc*(F1+F2)/1000; %Signal repeat times number
@@ -46,7 +46,7 @@ GrabRef = zeros(LoopNum,1); %Captured reference signal
 Phi = zeros(LoopNum,L); %Matrix for decrypting captured signal
 CodeObj = CodeMatrix*SigObj; %Encrypting reflected object signal 
 CodeRef = CodeMatrix*SigRef; %Encrypting transmitted reference signal 
-NoiseCodeObj = awgn(CodeObj,40,'measured');
+NoiseCodeObj = awgn(CodeObj,50,'measured');
 for i=1:LoopNum
     loc = Pos(i,1);
     GrabObj(i,1) = NoiseCodeObj(loc,1);

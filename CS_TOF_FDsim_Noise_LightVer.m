@@ -3,7 +3,7 @@ clear all
 close all
 %% Create signal
 LightSpeed = 3e8;
-OrgDis = 775; %m
+OrgDis = 45; %m
 Fbase = 1000; %KHz
 F1 = Fbase; %KHz = 1MHz %First frequency of the signal
 F2 = 1.2*Fbase; %KHz = 1.2MHz %Second frequency of the signal
@@ -143,14 +143,14 @@ for i = 1:Cycle
     RcvRefCyc(i) = RcvRef(i);
 end
 
-for i = 1:length(RcvObjCyc)
+for i = 1:Cycle
     if(RcvObjCyc(i) == max(RcvObjCyc))
         MaxObjLoc = i;
         break;
     end
 end
 
-for i = 1:length(RcvRefCyc)
+for i = 1:Cycle
     if(RcvRefCyc(i) == max(RcvRefCyc))
         MaxRefLoc = i;
         break;

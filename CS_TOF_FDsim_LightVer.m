@@ -4,7 +4,7 @@ clc;
 
 %% Create signal
 LightSpeed = 3e8;
-OrgDis = 500; %m
+OrgDis = 45; %m
 Fbase = 1000; %KHz
 F1 = Fbase; %KHz = 1MHz %First frequency of the signal
 F2 = 1.2*Fbase; %KHz = 1.2MHz %Second frequency of the signal
@@ -33,16 +33,6 @@ for i=1:L
     SigRef(i) = cos(2*pi*F1/(Fbase*SampPerCyc)*i+PD1)+cos(2*pi*F2/(Fbase*SampPerCyc)*i+PD2)+2;
 end
 
-figure()
-plot(SigRef,'g');
-hold on 
-plot(SigObj,'r');
-xlim([0 1000]); %Limit for clear view of signal phase difference
-legend('Reference','Object')
-title('Original Signal')
-xlabel('ms')
-ylabel('Amplitude')
-
 %% Capture and recover compressed signal
 GrabObj = zeros(LoopNum,1); %Captured object signal
 GrabRef = zeros(LoopNum,1); %Captured reference signal
@@ -56,24 +46,6 @@ for i=1:LoopNum
     GrabRef(i,1) = CodeRef(loc,1);
     Phi(i,:) = CodeMatrix(loc,:);
 end
-
-figure()
-plot(CodeObj,'g');
-hold all
-plot(CodeRef,'r');
-legend('Reflected Object','Transmitted Reference');
-title('Encrypted Signal');
-ylabel('Intensity')
-xlabel('ms');
-
-figure()
-plot(GrabObj,'g');
-hold on
-plot(GrabRef,'r');
-legend('Reflected Object','Transmitted Reference');
-title("Captured Signal");
-ylabel('Intensity');
-xlabel('Samples');
 
 Psi = inv(fft(eye(L))); %Coding matrix
 %Recover object signal
@@ -92,14 +64,14 @@ cvx_begin
     Phi*Psi*xpR == GrabRef;
 cvx_end
 %% Confirm correct recovery
-figure()
+subplot(8,1,1)
 plot(real(xp),'r')
 title('Fourier Transform Of Object Signal');
-figure()
+subplot(8,1,2)
 plot(real(xpR),'r')
 title('Fourier Transform Of Reference Signal');
 
-figure()
+subplot(8,1,3)
 plot(real(ifft(xpR)),'g.');
 xlim([0 1000])
 hold all
@@ -107,7 +79,7 @@ plot(SigRef,'r');
 legend('Recovered Reference','Original Reference')
 title('Recovery Verify for Reference Signal');
 
-figure()
+subplot(8,1,4)
 plot(real(ifft(xp)),'g.');
 xlim([0 1000])
 hold all
@@ -115,9 +87,37 @@ plot(SigObj,'r');
 legend('Recovered Object','Original Object')
 title('Recovery Verify for Object Signal'); 
 
-figure()
+subplot(8,1,5)
+plot(SigRef,'g');
+hold on 
+plot(SigObj,'r');
+%xlim([0 1000]); %Limit for clear view of signal phase difference
+legend('Reference','Object')
+title('Original Signal')
+xlabel('ms')
+ylabel('Amplitude')
+
+subplot(8,1,6)
+plot(CodeObj,'g');
+hold all
+plot(CodeRef,'r');
+legend('Reflected Object','Transmitted Reference');
+title('Encrypted Signal');
+ylabel('Intensity')
+xlabel('ms');
+
+subplot(8,1,7)
+plot(GrabObj,'g');
+hold on
+plot(GrabRef,'r');
+legend('Reflected Object','Transmitted Reference');
+title("Captured Signal");
+ylabel('Intensity');
+xlabel('Samples');
+
+subplot(8,1,8)
 plot(real(ifft(xpR)),'g');
-xlim([0 1000]) %Limit for clear view of signal phase difference
+%xlim([0 1000]) %Limit for clear view of signal phase difference
 hold all
 plot(real(ifft(xp)),'r');
 legend('Reference','Object')
