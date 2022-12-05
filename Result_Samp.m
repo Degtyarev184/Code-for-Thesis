@@ -9,7 +9,7 @@ figure();
 plot(LoopNum,ErrObjMean,'-sr');
 xlabel("Samples");
 ylabel("Mean Squared Error");
-title("Relation between SNR and Recover MSE");
+title("Relation between Samples Number and Recover MSE");
 hold on
 errorbar(LoopNum,ErrObjMean,ErrObjStd,'r');
 ErrDisStd = std(ErrDisAbs,0,2);
@@ -18,6 +18,6 @@ figure();
 plot(LoopNum,ErrDisMean,'-sg');
 xlabel("Samples");
 ylabel("Percentage (%)");
-title("Relation between SNR and Distance Error Rate");
+title("Relation between Samples Number and Distance Error Rate");
 hold on
 errorbar(LoopNum,ErrDisMean,ErrDisStd,'g');

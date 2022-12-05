@@ -3,18 +3,18 @@ clear all
 close all
 %% Create signal
 LightSpeed = 3e8;
-OrgDis = 45; %m
+OrgDis = 500; %m
 Fbase = 1000; %KHz
 F1 = Fbase; %KHz = 1MHz %First frequency of the signal
 F2 = 1.2*Fbase; %KHz = 1.2MHz %Second frequency of the signal
 PD1 = (2*pi*10^3*2*F1*OrgDis)/LightSpeed; %1st Component Phase Difference
 PD2 = (2*pi*10^3*2*F2*OrgDis)/LightSpeed; %2nd Component Phase Difference
 SpL = 2; %Sparse level
-SampPerCyc = 60;
+SampPerCyc = 80;
 Fs = 10; %Sampling Frequency at 10 KHz
 L = (SampPerCyc*(F1+F2)/Fs)/2; %Length of the signal reduced 2 times for faster calculation
-LoopNum = SampPerCyc*(F1+F2)/1000; %Signal repeat times number
-SampleShift = L/LoopNum; %Delay between sample capture
+LoopNum = 300; %Signal repeat times number
+SampleShift = round(L/LoopNum); %Delay between sample capture
 Pos = zeros(LoopNum,1); %Captured position of signal
 RealGrabRef = zeros(L,1);
 RealGrabObj = zeros(L,1);

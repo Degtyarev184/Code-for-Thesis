@@ -4,7 +4,7 @@ clc;
 
 %% Create signal
 LightSpeed = 3e8;
-OrgDis = 45; %m
+OrgDis = 500; %m
 Fbase = 1000; %KHz
 F1 = Fbase; %KHz = 1MHz %First frequency of the signal
 F2 = 1.2*Fbase; %KHz = 1.2MHz %Second frequency of the signal
@@ -64,14 +64,7 @@ cvx_begin
     Phi*Psi*xpR == GrabRef;
 cvx_end
 %% Confirm correct recovery
-subplot(8,1,1)
-plot(real(xp),'r')
-title('Fourier Transform Of Object Signal');
-subplot(8,1,2)
-plot(real(xpR),'r')
-title('Fourier Transform Of Reference Signal');
-
-subplot(8,1,3)
+figure()
 plot(real(ifft(xpR)),'g.');
 xlim([0 1000])
 hold all
@@ -79,7 +72,7 @@ plot(SigRef,'r');
 legend('Recovered Reference','Original Reference')
 title('Recovery Verify for Reference Signal');
 
-subplot(8,1,4)
+figure()
 plot(real(ifft(xp)),'g.');
 xlim([0 1000])
 hold all
@@ -87,42 +80,60 @@ plot(SigObj,'r');
 legend('Recovered Object','Original Object')
 title('Recovery Verify for Object Signal'); 
 
-subplot(8,1,5)
+figure()
+subplot(5,2,[1 2])
 plot(SigRef,'g');
+set(gca,'XTick',[])
 hold on 
 plot(SigObj,'r');
+set(gca,'XTick',[]);
 %xlim([0 1000]); %Limit for clear view of signal phase difference
 legend('Reference','Object')
 title('Original Signal')
-xlabel('ms')
+%xlabel('ms')
 ylabel('Amplitude')
 
-subplot(8,1,6)
+subplot(5,2,[3 4])
 plot(CodeObj,'g');
+set(gca,'XTick',[]);
 hold all
 plot(CodeRef,'r');
+set(gca,'XTick',[]);
 legend('Reflected Object','Transmitted Reference');
 title('Encrypted Signal');
 ylabel('Intensity')
-xlabel('ms');
+%xlabel('ms');
 
-subplot(8,1,7)
+subplot(5,2,[5 6])
 plot(GrabObj,'g');
+set(gca,'XTick',[]);
 hold on
 plot(GrabRef,'r');
+set(gca,'XTick',[]);
 legend('Reflected Object','Transmitted Reference');
 title("Captured Signal");
 ylabel('Intensity');
-xlabel('Samples');
+%xlabel('Samples');
 
-subplot(8,1,8)
+subplot(5,2,7)
+plot(real(fftshift(xp)),'r')
+set(gca,'XTick',[]);
+title('Fourier Transform Of Object Signal');
+subplot(5,2,8)
+plot(real(fftshift(xpR)),'r')
+set(gca,'XTick',[]);
+title('Fourier Transform Of Reference Signal');
+
+subplot(5,2,[9 10])
 plot(real(ifft(xpR)),'g');
+set(gca,'XTick',[]);
 %xlim([0 1000]) %Limit for clear view of signal phase difference
 hold all
 plot(real(ifft(xp)),'r');
+set(gca,'XTick',[]);
 legend('Reference','Object')
 title('Processed signal')
-xlabel('ms')
+%xlabel('ms')
 ylabel('Amplitude')
 %% Calculate phase difference (in time domain)
 MaxObjLoc = 0;
