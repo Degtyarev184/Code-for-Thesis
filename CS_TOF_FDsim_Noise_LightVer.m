@@ -10,10 +10,10 @@ F2 = 1.2*Fbase; %KHz = 1.2MHz %Second frequency of the signal
 PD1 = (2*pi*10^3*2*F1*OrgDis)/LightSpeed; %1st Component Phase Difference
 PD2 = (2*pi*10^3*2*F2*OrgDis)/LightSpeed; %2nd Component Phase Difference
 SpL = 2; %Sparse level
-SampPerCyc = 80;
+SampPerCyc = 60;
 Fs = 10; %Sampling Frequency at 10 KHz
 L = (SampPerCyc*(F1+F2)/Fs)/2; %Length of the signal reduced 2 times for faster calculation
-LoopNum = 300; %Signal repeat times number
+LoopNum = 250; %Signal repeat times number
 SampleShift = round(L/LoopNum); %Delay between sample capture
 Pos = zeros(LoopNum,1); %Captured position of signal
 RealGrabRef = zeros(L,1);

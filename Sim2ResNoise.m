@@ -22,12 +22,12 @@ plot(OrgDis,MeanDisF2N,'-xg');
 hold on
 plot(OrgDis,MeanDis2FN,'-xb');
 
-hold on
-errorbar(OrgDis,MeanDisF1N,StdDisF1N,'r');
-hold on
-errorbar(OrgDis,MeanDisF2N,StdDisF2N,'g');
-hold on
-errorbar(OrgDis,MeanDis2FN,StdDis2FN,'b');
+% hold on
+% errorbar(OrgDis,MeanDisF1N,StdDisF1N,'r');
+% hold on
+% errorbar(OrgDis,MeanDisF2N,StdDisF2N,'g');
+% hold on
+% errorbar(OrgDis,MeanDis2FN,StdDis2FN,'b');
 
 legend("1MHz","1.2MHz","Two Frequency");
 title("Measured Distance with SNR = 50dB");

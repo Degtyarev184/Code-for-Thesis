@@ -11,7 +11,7 @@ xlabel("Samples");
 ylabel("Mean Squared Error");
 title("Relation between Samples Number and Recover MSE");
 hold on
-errorbar(LoopNum,ErrObjMean,ErrObjStd,'r');
+% errorbar(LoopNum,ErrObjMean,ErrObjStd,'r');
 ErrDisStd = std(ErrDisAbs,0,2);
 ErrDisMean = flip(mean(ErrDisAbs,2));
 figure();
@@ -20,4 +20,4 @@ xlabel("Samples");
 ylabel("Percentage (%)");
 title("Relation between Samples Number and Distance Error Rate");
 hold on
-errorbar(LoopNum,ErrDisMean,ErrDisStd,'g');
+% errorbar(LoopNum,ErrDisMean,ErrDisStd,'g');
